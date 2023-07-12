@@ -1,5 +1,5 @@
 import express from 'express';
-import {db} from '../config/dbConnection'
+import {db} from '../config/db'
 import {IUser} from '../user/models/IUser'
 const userRouter: express.Router = express.Router();
 

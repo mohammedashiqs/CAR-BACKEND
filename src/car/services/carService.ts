@@ -1,17 +1,16 @@
 import {ICar} from "../models/ICar"
-import {db} from "../../config/dbConnection"
 import collection from "../../config/collections"
 import { CustomError } from "../../../commen/custumError"
-
+import {db} from '../../config/db'
 
 
 export const getAllCars = async () => {
-
+    
     try{
 
         let car =  await db.collection(collection.CAR_COLLECTION).find().toArray()
-    
-            if (!car) {
+        console.log(car)
+            if (!car || car.length == 0) {
 
                 throw new CustomError(
                     "No Cars found",

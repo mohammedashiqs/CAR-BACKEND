@@ -1,23 +1,25 @@
 import express from 'express';
 import dotenv from 'dotenv';
+//configure dotenv
+dotenv.config({path : './.env'})
 import handleError from './src/middlewares/errorHandlingMiddleware';
-import { connectToDatabase } from './src/config/dbConnection';
+
+
+import {exampleFunction} from './src/config/db'
+
+exampleFunction();
 
 import car from './src/routes/car'
+import dealership from './src/routes/dealership'
 
-connectToDatabase()
+
 const app:express.Application = express();
-
-/* import { faker } from '@faker-js/faker';
-let firstName = faker.vehicle.vehicle();
-console.log(firstName) */
 
 
 // configure express form receive form data
 app.use(express.json());
 
-//configure dotenv
-dotenv.config({path : './.env'})
+
 
 
 
@@ -32,6 +34,7 @@ app.get('/', (req:express.Request, res:express.Response) =>{
 
 //router configuration
 app.use('/cars', car)
+app.use('/dealerships', dealership)
 
 app.use(handleError)
 

@@ -8,10 +8,10 @@ const carRouter: express.Router = express.Router()
 
 carRouter.get('/car', async (req: express.Request, res: express.Response, next) => {
     try {
-
-        /* todo get all cars logic */
+        
+         /* todo get all cars logic */
         let car = await getAllCars()
-
+       
         res.status(200).json({
             car: car
         })
