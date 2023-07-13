@@ -44,4 +44,28 @@ dealershipRouter.get('/dealership/:carId', async (req: express.Request, res: exp
 })
 
 
+
+dealershipRouter.get('/dealership/:carId', async (req: express.Request, res: express.Response, next) => {
+    try{
+        let carId: ObjectId = new ObjectId(req.params.carId)
+
+        
+        let dealerships= await getDealership(carId)
+
+        
+
+        res.status(200).json({
+            dealerships: dealerships
+        })
+        
+    }catch(error){
+        next(error)
+    }
+})
+
+
+
 export default dealershipRouter
+
+
+

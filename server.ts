@@ -12,6 +12,7 @@ exampleFunction();
 import user from './src/routes/user'
 import car from './src/routes/car'
 import dealership from './src/routes/dealership'
+import deal from './src/routes/deal'
 
 
 const app:express.Application = express();
@@ -37,6 +38,7 @@ app.get('/', (req:express.Request, res:express.Response) =>{
 app.use('/users', user)
 app.use('/cars', car)
 app.use('/dealerships', dealership)
+app.use('/deals', deal)
 
 app.use(handleError)
 
