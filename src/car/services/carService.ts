@@ -9,7 +9,6 @@ export const getAllCars = async () => {
     try{
 
         let car =  await db.collection(collection.CAR_COLLECTION).find().toArray()
-        console.log(car)
             if (!car || car.length == 0) {
 
                 throw new CustomError(

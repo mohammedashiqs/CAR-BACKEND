@@ -34,8 +34,10 @@ To deploy this project run
 
  1. Create a user
  2. User login
+ 3. user logout
+ 4. forgotpassword
 
-3. To view all vehicles owned by user
+5. To view all vehicles owned by user
    
    usage: To view all vehicles owned by user
    url: http://127.0.0.1:5000/users/ownedVehicles/userId
@@ -70,7 +72,7 @@ To deploy this project run
  1. To view all cars in a dealership
    
    usage: To view all cars in a dealership
-   url: http://127.0.0.1:5000/cars/cars/:dealershipId
+   url: http://127.0.0.1:5000/dealerships/cars/:dealershipId
    method: get
    fields: no-fields
    access: public
