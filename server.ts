@@ -9,6 +9,7 @@ import {exampleFunction} from './src/config/db'
 
 exampleFunction();
 
+import user from './src/routes/user'
 import car from './src/routes/car'
 import dealership from './src/routes/dealership'
 
@@ -33,6 +34,7 @@ app.get('/', (req:express.Request, res:express.Response) =>{
 })
 
 //router configuration
+app.use('/users', user)
 app.use('/cars', car)
 app.use('/dealerships', dealership)
 

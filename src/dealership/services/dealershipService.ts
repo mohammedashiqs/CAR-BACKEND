@@ -38,6 +38,14 @@ export const getCars = async (dealershipId: ObjectId) => {
                     }
                 }
             ]).toArray()
+
+            if (!cars || cars.length == 0) {
+                throw new CustomError(
+                    "No cars found",
+                    400,
+                    ""
+                )
+            }
             
             
             return cars
