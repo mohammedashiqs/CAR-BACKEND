@@ -1,19 +1,39 @@
 import express from 'express'
 import { ObjectId } from 'mongodb';
-import { getDeals } from '../deal/services/dealServices';
+import { dealsOnCertainCar, dealsOnCertainDealership } from '../deal/services/dealServices';
 
 
 const dealRouter: express.Router = express.Router();
 
 
 
-
-dealRouter.get('/deals', async (req: express.Request, res: express.Response, next) => {
+/* To view all deals on a certain car - user ends */
+dealRouter.get('/dealsOnCertainCar', async (req: express.Request, res: express.Response, next) => {
     try{
         let {userId, carId}: any = req.query
 
         
-        let deals= await getDeals(userId, carId)
+        let deals= await dealsOnCertainCar(userId, carId)
+
+        
+
+        res.status(200).json({
+            deals: deals
+        })
+        
+    }catch(error){
+        next(error)
+    }
+})
+
+
+/* To view all deals from a certain dealership - user ends */
+dealRouter.get('/dealsOnCertainDealership', async (req: express.Request, res: express.Response, next) => {
+    try{
+        let {userId, dealershipId}: any = req.query
+
+        
+        let deals= await dealsOnCertainDealership(userId, dealershipId)
 
         
 

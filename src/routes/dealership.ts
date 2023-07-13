@@ -6,7 +6,7 @@ import {getCars, getDealership } from '../dealership/services/dealershipService'
 
 const dealershipRouter: express.Router = express.Router();
 
-
+/* To view all cars in a dealership - user ends */
 dealershipRouter.get('/cars/:dealershipId', async (req: express.Request, res: express.Response, next) => {
     try{
         let dealershipId: ObjectId = new ObjectId(req.params.dealershipId)
@@ -24,7 +24,7 @@ dealershipRouter.get('/cars/:dealershipId', async (req: express.Request, res: ex
 })
 
 
-
+/* To view dealerships with a certain car - user end */
 dealershipRouter.get('/dealership/:carId', async (req: express.Request, res: express.Response, next) => {
     try{
         let carId: ObjectId = new ObjectId(req.params.carId)
@@ -42,27 +42,6 @@ dealershipRouter.get('/dealership/:carId', async (req: express.Request, res: exp
         next(error)
     }
 })
-
-
-
-dealershipRouter.get('/dealership/:carId', async (req: express.Request, res: express.Response, next) => {
-    try{
-        let carId: ObjectId = new ObjectId(req.params.carId)
-
-        
-        let dealerships= await getDealership(carId)
-
-        
-
-        res.status(200).json({
-            dealerships: dealerships
-        })
-        
-    }catch(error){
-        next(error)
-    }
-})
-
 
 
 export default dealershipRouter

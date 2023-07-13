@@ -118,7 +118,7 @@ To deploy this project run
 1. To view all deals from a certain dealership
 
    usage: To view all deals from a certain dealership
-   url: http://127.0.0.1:5000/deals/deals/:dealershipId
+   url: http://127.0.0.1:5000/deals/dealsOnCertainDealership
    method: get
    fields: no-fields
    access: private
@@ -127,13 +127,13 @@ To deploy this project run
 2. To view all deals on a certain car
 
    usage: To view all deals on a certain car
-   url: http://127.0.0.1:5000/deals/deals/:carId
+   url: http://127.0.0.1:5000/deals/dealsOnCertainCar/
    method: get
    fields: no-fields
    access: private
 
 
-2. To view deals provided by dealership
+3. To view deals provided by dealership
 
    usage: To view all deals on a certain car
    url: http://127.0.0.1:5000/deals/deals/:dealershipId
