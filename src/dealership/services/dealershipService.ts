@@ -2,6 +2,7 @@
 import { ObjectId } from 'mongodb';
 import { IDealership } from '../models/IDealership';
 import collections from '../../config/collections';
+import { CustomError } from "../../../commen/custumError"
 import { db } from '../../config/db';
 
 
@@ -45,4 +46,38 @@ export const getCars = async (dealershipId: ObjectId) => {
             throw error
         }
     }
+
+
+
+
+    
+
+export const getDealership = async (carId: ObjectId) => {
+    try{
+        console.log(carId)
+        let dealerships = await db.collection(collections.DEALERSHIP_COLLECTION).aggregate([
+            {
+                $unwind: '$cars'
+            },
+            {
+                $match: {cars: carId}
+            }
+        ]).toArray()
+        
+        if (!dealerships || dealerships.length == 0) {
+            throw new CustomError(
+                "No Dealerships found",
+                400,
+                ""
+            )
+        }
+        
+        return dealerships
+
+    }catch(error){
+        throw error
+    }
+}
+
+
 
