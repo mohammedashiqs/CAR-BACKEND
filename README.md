@@ -106,9 +106,9 @@ To deploy this project run
  6. To add deals to dealership
 
    usage: To add deals to dealership
-   url: http://127.0.0.1:5000/dealerships/addDeals/:dealId
+   url: http://127.0.0.1:5000/dealerships/addDeals/:dealershipId
    method: post
-   fields: no-fields
+   fields: car_id, deal_info{dealerShipId, downPayment, financing{month, interest}, monthlyPayments{remainging_bal, monthlyPayment}, negotiatedPrice, userId, vehicle}
    access: private
  
 

@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb"
 import { CustomError } from "../../../commen/custumError"
 import { db } from "../../config/db"
 import collections from "../../config/collections"
+import { IDeal } from "../models/IDeal"
 
 
 
@@ -131,6 +132,32 @@ export const getDeals = async (dealershipId: any) => {
         }
         
         return deals
+
+    }catch(error){
+        throw error
+    }
+}
+
+
+export const createDeals = async (dealershipId: ObjectId, deal:IDeal)=> {
+
+    try{
+
+        //check if the deal is exists
+
+        //register the deal
+        deal.createdAt = new Date()
+    let insertedDeal = await db.collection(collections.DEAL_COLLECTION).insertOne(deal)
+
+        //update in dealership collection
+    if(insertedDeal.insertedId){
+                        await db.collection(collections.DEALERSHIP_COLLECTION).updateOne({_id:dealershipId}, {
+                            $push:{deals: insertedDeal.insertedId}, $set:{updatedAt: new Date()}
+                        })
+    }
+
+    return insertedDeal
+
 
     }catch(error){
         throw error
