@@ -1,6 +1,6 @@
 import express from 'express'
 import { ObjectId } from 'mongodb';
-import { dealsOnCertainCar, dealsOnCertainDealership } from '../deal/services/dealServices';
+import { dealsOnCertainCar, dealsOnCertainDealership, getDeals } from '../deal/services/dealServices';
 
 
 const dealRouter: express.Router = express.Router();
@@ -47,7 +47,23 @@ dealRouter.get('/dealsOnCertainDealership', async (req: express.Request, res: ex
 })
 
 
+/* To view deals provided by dealership - dealership ends */
+dealRouter.get('/dealsProvidedByDealership/:dealershipId', async (req: express.Request, res: express.Response, next) => {
+    try{
+        let dealershipId: ObjectId = new ObjectId(req.params.dealershipId)
 
+        
+        let deals= await getDeals(dealershipId)
 
+        
+
+        res.status(200).json({
+            deals: deals
+        })
+        
+    }catch(error){
+        next(error)
+    }
+})
 
 export default dealRouter

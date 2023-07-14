@@ -91,3 +91,49 @@ export const dealsOnCertainDealership = async (userId: any, dealershipId: any) =
 
 
 
+
+
+export const getDeals = async (dealershipId: any) => {
+    try{
+
+        
+        dealershipId = new ObjectId(dealershipId)
+
+        let deals = await db.collection(collections.DEALERSHIP_COLLECTION).aggregate([
+            {
+                $match: {_id: dealershipId}
+            },
+            {
+                $unwind: '$deals'
+            },
+            {
+                $lookup:{
+                    from: collections.DEAL_COLLECTION,
+                    localField: 'deals',
+                    foreignField: '_id',
+                    as: 'deals'
+                }
+            },
+            {
+                $project:{
+                    _id:0,
+                    deals:1
+                }
+            }
+        ]).toArray()
+        
+        if (!deals || deals.length == 0) {
+            throw new CustomError(
+                "No deals found",
+                400,
+                ""
+            )
+        }
+        
+        return deals
+
+    }catch(error){
+        throw error
+    }
+}
+
