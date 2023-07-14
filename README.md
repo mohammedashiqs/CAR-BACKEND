@@ -98,10 +98,11 @@ To deploy this project run
  5. To add cars to dealership
 
    usage: To add cars to dealership
-   url: http://127.0.0.1:5000/dealerships/addcars/carIds
+   url: http://127.0.0.1:5000/dealerships/addCars/:dealershipId
    method: post
-   fields: no-fields
+   fields: car_info:{mileage, seating_capacity}, model, name, type
    access: private
+
  6. To add deals to dealership
 
    usage: To add deals to dealership

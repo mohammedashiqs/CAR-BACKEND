@@ -1,7 +1,8 @@
 import express from 'express'
 import { ObjectId } from 'mongodb';
 import { IDealership } from '../dealership/models/IDealership';
-import {getCars, getDealership } from '../dealership/services/dealershipService'
+import {createCar, getCars, getDealership } from '../dealership/services/dealershipService'
+import { ICar } from '../car/models/ICar';
 
 
 const dealershipRouter: express.Router = express.Router();
@@ -42,6 +43,29 @@ dealershipRouter.get('/dealership/:carId', async (req: express.Request, res: exp
         next(error)
     }
 })
+
+
+
+
+/* To add cars to dealership */
+dealershipRouter.post('/addCars/:dealershipId', async (req: express.Request, res: express.Response, next) => {
+    try{
+        let dealershipId: ObjectId = new ObjectId(req.params.dealershipId)
+        let car: ICar = req.body
+        
+        let createdCar= await createCar(dealershipId, car)
+
+        res.status(200).json({
+            msg: 'car added successfully',
+            createdCar: createdCar
+        })
+
+
+    }catch(error){
+        next(error)
+    }
+})
+
 
 
 export default dealershipRouter

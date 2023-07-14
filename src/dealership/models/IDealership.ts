@@ -7,6 +7,8 @@ export interface IDealership {
   cars: string[]
   deals: string[]
   sold_vehicles: string[]
+  createdAt?: Date
+  updatedAt?: Date
   };
   
   

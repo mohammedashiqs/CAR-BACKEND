@@ -4,6 +4,7 @@ import { IDealership } from '../models/IDealership';
 import collections from '../../config/collections';
 import { CustomError } from "../../../commen/custumError"
 import { db } from '../../config/db';
+import { ICar } from '../../car/models/ICar';
 
 
 
@@ -81,6 +82,33 @@ export const getDealership = async (carId: ObjectId) => {
         }
         
         return dealerships
+
+    }catch(error){
+        throw error
+    }
+}
+
+
+
+export const createCar = async (dealershipId: ObjectId, car:ICar)=> {
+
+    try{
+
+        //check if the car is exists
+
+        //register the car
+        car.createdAt = new Date()
+    let insertedCar = await db.collection(collections.CAR_COLLECTION).insertOne(car)
+
+        //update in dealership collection
+    if(insertedCar.insertedId){
+                        await db.collection(collections.DEALERSHIP_COLLECTION).updateOne({_id:dealershipId}, {
+                            $push:{cars: insertedCar.insertedId}, $set:{updatedAt: new Date()}
+                        })
+    }
+
+    return insertedCar
+
 
     }catch(error){
         throw error
