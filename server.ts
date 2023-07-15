@@ -31,7 +31,7 @@ const port: string | undefined = process.env.PORT;
 
 app.get('/', (req:express.Request, res:express.Response) =>{
     res.status(200).send(
-        `<h1>Welcome</h1>`
+        `<h1>Welcome to the car</h1>`
     )
 })
 
