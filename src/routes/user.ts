@@ -1,24 +1,50 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import {db} from '../config/db'
 import {IUser} from '../user/models/IUser'
 import { ObjectId } from 'mongodb';
-import { getOwnedVehicles } from '../user/services/userServies';
+import {body, validationResult} from 'express-validator';
+import collections from '../config/collections';
+import { createUser } from '../user/services/userServies';
+
+
+
 const userRouter: express.Router = express.Router();
 
-userRouter.get('/ownedVehicles/:userId',async (req:express.Request, res: express.Response, next) => {
+
+
+userRouter.post('/register', [
+    body('user_email').not().isEmpty().withMessage('Email is required'),
+    body('password').not().isEmpty().withMessage('Password is required'),
+    body('user_location').not().isEmpty().withMessage('Location is required'),
+], async (req: express.Request, res: express.Response, next:NextFunction)=>{
+
+        let errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                errors: errors.array()
+            })
+        }
+
+        try{
+            let user: IUser = req.body
+            //todo registration logic
+
+            let createdUser = await createUser(user)
             
-    try{
-        let carId: ObjectId = new ObjectId(req.params.userId)
-        let ownedVehicles = await getOwnedVehicles(carId)
-        
-        res.status(200).json({
-            ownedVehicles: ownedVehicles
-        })
+         
+            res.status(200).json({
+                msg: 'user created successfully',
+                createdCar: createdUser
+            })
 
-    }catch(error){
-        next(error)
-    }
 
+
+        }catch(error){
+            next(error)
+        }
 })
+
+
+
 
 export default userRouter;

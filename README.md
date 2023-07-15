@@ -37,13 +37,7 @@ To deploy this project run
  3. user logout
  4. forgotpassword
 
-5. To view all vehicles owned by user
-   
-   usage: To view all vehicles owned by user
-   url: http://127.0.0.1:5000/users/ownedVehicles/userId
-   method: get
-   fields: no-fields
-   access: private
+
 
 ## II Car Module
 -------------------
@@ -57,7 +51,13 @@ To deploy this project run
    access: public
 
 
-
+2. To view all vehicles owned by user
+   
+   usage: To view all vehicles owned by user
+   url: http://127.0.0.1:5000/cars/ownedVehicles/userId
+   method: get
+   fields: no-fields
+   access: private
 
 
 

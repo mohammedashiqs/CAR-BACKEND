@@ -4,6 +4,8 @@ export interface IUser {
   user_info: object;
   password : string;
   vehicle_info: string[];
+  createdAt?: Date
+  updatedAt?: Date
 };
 
 

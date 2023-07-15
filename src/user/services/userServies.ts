@@ -1,56 +1,41 @@
-
 import collections from '../../config/collections';
 import { CustomError } from "../../../commen/custumError"
 import { db } from '../../config/db';
 import { ObjectId } from 'mongodb';
+import { IUser } from '../models/IUser';
+import bcrypt from 'bcrypt'
 
 
 
 
-export const getOwnedVehicles = async (userId: ObjectId) => {
-    try{
-        console.log(userId)
-        let ownedVehicles = await db.collection(collections.USER_COLLECTION).aggregate([
-            {
-                $match:{_id: userId}
-            },
-            {
-                $unwind: '$vehicle_info'
-            },
-            {
-                $lookup:{
-                    from: collections.SOLDVEHICLES_COLLECTION,
-                    localField: 'vehicle_info',
-                    foreignField: '_id',
-                    as: 'carId'
-                }
-            },
-            {
-                $lookup:{
-                    from: collections.CAR_COLLECTION,
-                    localField: 'carId.car_id',
-                    foreignField: '_id',
-                    as: 'cars'
-                }
-            },
-            {
-                $project:{
-                    _id: 0,
-                    cars:1
-                }
-            }
+export const createUser = async (user:IUser)=>{
+
+    try {
+
+        //check if the email is exists
+        let userFromDb = await db.collection(collections.USER_COLLECTION).findOne({user_email: user.user_email})
+        if(userFromDb){
+
+            throw new CustomError(
+                "User is Already exists",
+                400,
+                ""
+            )
+        }
+
+        //encrypt the password
+        let salt = await bcrypt.genSalt(10)
+        user.password = await bcrypt.hash(user.password, salt)
+
+        //register the user
+         user.createdAt = new Date()
+         let createdUser = await db.collection(collections.USER_COLLECTION).insertOne(user)
         
-           
-        ]).toArray()
-        
-        
-        return ownedVehicles
-
-    }catch(error){
+         return createdUser
+    } catch (error) {
         throw error
     }
+
 }
-
-
 
 
