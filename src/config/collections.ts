@@ -5,6 +5,7 @@ export = {
     USER_COLLECTION: "users",
     DEALERSHIP_COLLECTION: "dealerships",
     DEAL_COLLECTION: "deals",
-    SOLDVEHICLES_COLLECTION: "soldVehicles"
+    SOLDVEHICLES_COLLECTION: "soldVehicles",
+    USERTOKEN_COLLECTION: "userTokens"
 }   
     

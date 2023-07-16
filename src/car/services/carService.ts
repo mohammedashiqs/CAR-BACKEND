@@ -1,6 +1,6 @@
 import {ICar} from "../models/ICar"
 import collection from "../../config/collections"
-import { CustomError } from "../../../commen/custumError"
+import { CustomError } from "../../common/models/custumError"
 import {db} from '../../config/db'
 import collections from "../../config/collections"
 import { ObjectId } from "mongodb"

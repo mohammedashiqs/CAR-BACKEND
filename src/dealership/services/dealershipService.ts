@@ -2,7 +2,7 @@
 import { ObjectId } from 'mongodb';
 import { IDealership } from '../models/IDealership';
 import collections from '../../config/collections';
-import { CustomError } from "../../../commen/custumError"
+import { CustomError } from "../../common/models/custumError"
 import { db } from '../../config/db';
 import { ICar } from '../../car/models/ICar';
 
@@ -97,7 +97,7 @@ export const createCar = async (dealershipId: ObjectId, car:ICar)=> {
         //check if the car is exists
 
         //register the car
-        car.createdAt = new Date()
+    car.createdAt = new Date()
     let insertedCar = await db.collection(collections.CAR_COLLECTION).insertOne(car)
 
         //update in dealership collection

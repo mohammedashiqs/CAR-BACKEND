@@ -32,10 +32,26 @@ To deploy this project run
 ## I User Module
 -------------------
 
- 1. Create a user
+ 1. User registration
+
+   usage: User registration
+   url: http://127.0.0.1:5000/users/register
+   method: post
+   fields: password, user_email, user_info, user_location
+   access: public
+   
+
+
  2. User login
+
+   usage: User login
+   url: http://127.0.0.1:5000/users/login
+   method: post
+   fields: password, user_email
+   access: public
+
  3. user logout
- 4. forgotpassword
+ 4. forgot password
 
 
 

@@ -1,5 +1,6 @@
+import { ObjectId } from "mongodb";
 export interface IDeal {
-    carId: string;
+    carId: ObjectId;
     dealInfo: object;
     createdAt?: Date
     updatedAt?: Date

@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb"
-import { CustomError } from "../../../commen/custumError"
+import { CustomError } from "../../common/models/custumError"
 import { db } from "../../config/db"
 import collections from "../../config/collections"
 import { IDeal } from "../models/IDeal"
