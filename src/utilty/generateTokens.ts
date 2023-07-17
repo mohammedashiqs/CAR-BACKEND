@@ -5,10 +5,17 @@ import { db } from '../config/db'
 
 const generateTokens = async (payload: any, userId: any) => {
 
+    
     try {
-        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20d' })
-        const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
+        let {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} = process.env
 
+        let accessToken;
+        let refreshToken;
+        if(ACCESS_TOKEN_SECRET && REFRESH_TOKEN_SECRET){
+
+         accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET , { expiresIn: '20d' })
+         refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET)
+        
 
         //remove refresh token if already present in this user
 
@@ -19,8 +26,10 @@ const generateTokens = async (payload: any, userId: any) => {
             userId: userId, token: refreshToken, createdAt: new Date()
         })
 
-        return Promise.resolve({accessToken, refreshToken})
+        
+    }
 
+    return Promise.resolve({accessToken, refreshToken})
 
     } catch (error) {
         return Promise.reject(error)

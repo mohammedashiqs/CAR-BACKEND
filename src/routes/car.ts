@@ -2,6 +2,7 @@ import express, { NextFunction } from 'express';
 import { ICar } from '../car/models/ICar';
 import { getAllCars, getOwnedVehicles } from '../car/services/carService';
 import { ObjectId } from 'mongodb';
+import { AuthenticateToken } from './../common/services/common';
 
 
 const carRouter: express.Router = express.Router()
@@ -23,11 +24,12 @@ carRouter.get('/car', async (req: express.Request, res: express.Response, next) 
 
 
 /* To view all vehicles owned by user */
-carRouter.get('/ownedVehicles/:userId',async (req:express.Request, res: express.Response, next) => {
+carRouter.get('/ownedVehicles', AuthenticateToken, async (req:express.Request, res: express.Response, next) => {
             
     try{
-        let carId: ObjectId = new ObjectId(req.params.userId)
-        let ownedVehicles = await getOwnedVehicles(carId)
+        const userId = req.userId
+
+        let ownedVehicles = await getOwnedVehicles(userId)
         
         res.status(200).json({
             ownedVehicles: ownedVehicles

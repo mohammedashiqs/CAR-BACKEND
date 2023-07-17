@@ -16,7 +16,7 @@ export const login = async (user_email: string, password: string) => {
     try {
 
         //check for email
-        let user = db.collection(collections.USER_COLLECTION).findOne({user_email:user_email})
+        let user: any  = await db.collection(collections.USER_COLLECTION).findOne({user_email:user_email})
 
         if(!user){
             throw new CustomError(
@@ -40,14 +40,14 @@ export const login = async (user_email: string, password: string) => {
 
         let payload: any = {
             user:{
-                id: user.id,
+                id: user._id,
                 name: user.user_info.name
             }
         }
 
         //generate access token and refresh token
 
-        const  tokens  =  await generateTokens(payload, user.id)
+        const  tokens  =  await generateTokens(payload, user._id)
 
         const {accessToken, refreshToken} = tokens
          

@@ -34,7 +34,7 @@ export const getAllCars = async () => {
 
 export const getOwnedVehicles = async (userId: ObjectId) => {
     try{
-        console.log(userId)
+        
         let ownedVehicles = await db.collection(collections.USER_COLLECTION).aggregate([
             {
                 $match:{_id: userId}

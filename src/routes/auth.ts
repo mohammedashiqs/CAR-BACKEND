@@ -42,3 +42,6 @@ authRouter.post('/login', [
   }
 
 })
+
+
+export default authRouter

@@ -14,6 +14,7 @@ import car from './src/routes/car'
 import dealership from './src/routes/dealership'
 import deal from './src/routes/deal'
 import soldVehicle from './src/routes/soldVehicle'
+import auth from './src/routes/auth'
 
 
 const app:express.Application = express();
@@ -41,6 +42,7 @@ app.use('/cars', car)
 app.use('/dealerships', dealership)
 app.use('/deals', deal)
 app.use('/soldVehicles', soldVehicle)
+app.use('/auths', auth)
 
 app.use(handleError)
 
