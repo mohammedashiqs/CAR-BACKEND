@@ -122,7 +122,7 @@ userRouter.get('/deals/:carId', async (req: express.Request, res: express.Respon
 
 
 
-/* To view all deals from a certain dealership - user ends */
+/* To view all deals from a certain dealership */
 userRouter.get('/deals/dealership/:dealershipId', async (req: express.Request, res: express.Response, next) => {
     try{
         let {userId, dealershipId}: any = req.query

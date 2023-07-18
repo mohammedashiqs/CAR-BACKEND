@@ -4,8 +4,8 @@ import { IDealership } from '../models/IDealership';
 import collections from '../../config/collections';
 import { CustomError } from "../../common/models/custumError"
 import { db } from '../../config/db';
-import { ICar } from '../../car/models/ICar';
-import { IDeal } from '../../deal/models/IDeal';
+import { ICar } from '../../user/models/ICar';
+import { IDeal } from '../models/IDeal';
 
 
 

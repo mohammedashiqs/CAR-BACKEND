@@ -2,8 +2,8 @@ import express from 'express'
 import { ObjectId } from 'mongodb';
 import { IDealership } from '../dealership/models/IDealership';
 import {addDeal, createCar, viewDeals, viewSoldCars, } from '../dealership/services/dealershipService'
-import { ICar } from '../car/models/ICar';
-import { IDeal } from '../deal/models/IDeal';
+import { ICar } from '../user/models/ICar';
+import { IDeal } from '../dealership/models/IDeal';
 import { viewAllCars } from '../user/services/userServies';
 
 
