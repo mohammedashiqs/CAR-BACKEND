@@ -10,10 +10,7 @@ import {exampleFunction} from './src/config/db'
 exampleFunction();
 
 import user from './src/routes/user'
-import car from './src/routes/car'
 import dealership from './src/routes/dealership'
-import deal from './src/routes/deal'
-import soldVehicle from './src/routes/soldVehicle'
 import auth from './src/routes/auth'
 
 
@@ -37,12 +34,9 @@ app.get('/', (req:express.Request, res:express.Response) =>{
 })
 
 //router configuration
-app.use('/users', user)
-app.use('/cars', car)
+app.use('/user', user)
 app.use('/dealerships', dealership)
-app.use('/deals', deal)
-app.use('/soldVehicles', soldVehicle)
-app.use('/auths', auth)
+app.use('/auth', auth)
 
 app.use(handleError)
 

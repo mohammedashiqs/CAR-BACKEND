@@ -1,56 +1,53 @@
 import express from 'express'
 import { ObjectId } from 'mongodb';
 import { IDealership } from '../dealership/models/IDealership';
-import {createCar, getCars, getDealership } from '../dealership/services/dealershipService'
+import {addDeal, createCar, viewDeals, viewSoldCars, } from '../dealership/services/dealershipService'
 import { ICar } from '../car/models/ICar';
-import { createDeals } from '../deal/services/dealServices';
 import { IDeal } from '../deal/models/IDeal';
+import { viewAllCars } from '../user/services/userServies';
 
 
 const dealershipRouter: express.Router = express.Router();
 
-/* To view all cars in a dealership - user ends */
-dealershipRouter.get('/cars/:dealershipId', async (req: express.Request, res: express.Response, next) => {
-    try{
-        let dealershipId: ObjectId = new ObjectId(req.params.dealershipId)
 
+/* To view all cars */
+dealershipRouter.get('/cars', async (req: express.Request, res: express.Response, next) => {
+    try {
         
-        let cars= await getCars(dealershipId)
-
+         /* todo get all cars logic */
+        let car = await viewAllCars()
+       
         res.status(200).json({
-            cars: cars
+            car: car
         })
-
-    }catch(error){
+    } catch (error) {
         next(error)
     }
 })
 
 
-/* To view dealerships with a certain car - user end */
-dealershipRouter.get('/dealership/:carId', async (req: express.Request, res: express.Response, next) => {
-    try{
-        let carId: ObjectId = new ObjectId(req.params.carId)
 
-        
-        let dealerships= await getDealership(carId)
+/* To view all cars sold by dealership */
+dealershipRouter.get('/sold-cars/:dealershipId', async (req:express.Request, res: express.Response, next) => {
 
-        
+    try {
+                let dealershipId: ObjectId = new ObjectId( req.params.dealershipId)
 
-        res.status(200).json({
-            dealerships: dealerships
-        })
-        
-    }catch(error){
+                let soldCars = await viewSoldCars(dealershipId)
+
+                res.status(200).json({
+                    soldCars: soldCars
+                })
+
+    } catch (error) {
         next(error)
     }
-})
 
-
+}) 
 
 
 /* To add cars to dealership */
-dealershipRouter.post('/addCars/:dealershipId', async (req: express.Request, res: express.Response, next) => {
+dealershipRouter.post('/add-car/:dealershipId', async (req: express.Request, res: express.Response, next) => {
     try{
         let dealershipId: ObjectId = new ObjectId(req.params.dealershipId)
         let car: ICar = req.body
@@ -70,13 +67,36 @@ dealershipRouter.post('/addCars/:dealershipId', async (req: express.Request, res
 
 
 
+
+/* To view deals provided by dealership */
+dealershipRouter.get('/deals/:dealershipId', async (req: express.Request, res: express.Response, next) => {
+    try{
+        let dealershipId: ObjectId = new ObjectId(req.params.dealershipId)
+
+        
+        let deals= await viewDeals(dealershipId)
+
+        
+
+        res.status(200).json({
+            deals: deals
+        })
+        
+    }catch(error){
+        next(error)
+    }
+})
+
+
+
+
 /* To add deals to dealership */
-dealershipRouter.post('/addDeals/:dealershipId', async (req: express.Request, res: express.Response, next) => {
+dealershipRouter.post('/add-deal/:dealershipId', async (req: express.Request, res: express.Response, next) => {
     try{
         let dealershipId: ObjectId = new ObjectId(req.params.dealershipId)
         let deal: IDeal = req.body
         
-        let createdDeal= await createDeals(dealershipId, deal)
+        let createdDeal= await addDeal(dealershipId, deal)
 
         res.status(200).json({
             msg: 'Deal added successfully',
