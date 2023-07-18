@@ -8,7 +8,7 @@ import { ObjectId } from 'mongodb'
 declare global{
     namespace Express{
         interface Request {
-                userId: ObjectId
+                user: {id: ObjectId, user_role: string}
         }
     }
 }
@@ -28,12 +28,22 @@ export const AuthenticateToken = (req: Request, res: Response, next: NextFunctio
 
         const decodedUser = jwt.decode(token, { complete: true });
         const payload: any = decodedUser?.payload
-        let id: ObjectId = new ObjectId(payload.user.id)
-        req.userId =  id
+        req.user =  payload.user
+        req.user.id = new ObjectId(payload.user.id)
         next()
     })
 }
 
+}
+
+export const authorizeRole = (requiredRole: string) => (req: Request, res: Response, next: NextFunction)=>{
+        const {user_role} = req.user
+        console.log(user_role)
+        if(user_role !== requiredRole){
+            return res.status(403).json({msg: 'Unauthorized access.'})
+        }
+
+        next()
 }
 
 

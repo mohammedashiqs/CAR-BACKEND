@@ -34,9 +34,9 @@ app.get('/', (req:express.Request, res:express.Response) =>{
 })
 
 //router configuration
-app.use('/user', user)
+app.use('/users', user)
 app.use('/dealerships', dealership)
-app.use('/auth', auth)
+app.use('/auths', auth)
 
 app.use(handleError)
 

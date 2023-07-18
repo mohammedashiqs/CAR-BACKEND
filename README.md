@@ -30,7 +30,7 @@ To deploy this project run
 ## I User Module
 -------------------
 
-1. To view all cars
+1. To view all cars  - Done
 
    description: Fetches a list of all cars available
    url: http://127.0.0.1:5000/user/cars
@@ -39,7 +39,7 @@ To deploy this project run
    access: public
 
 
-2. To view all cars in a dealership
+2. To view all cars in a dealership   - Done
    
    description: Fetches a list of all cars available in a specific dealership.
    url: http://127.0.0.1:5000/user/cars/:dealershipId
@@ -47,7 +47,7 @@ To deploy this project run
    fields: no-fields
    access: public
 
-3. To view dealerships with a certain car
+3. To view dealerships with a certain car - Done
 
    description: Fetches a list of dealerships that have a certain car in their inventory.
    url: http://127.0.0.1:5000/user/dealerships/:carId
@@ -55,7 +55,7 @@ To deploy this project run
    fields: no-fields
    access: public
 
-4. To view all vehicles owned by user
+4. To view all vehicles owned by user - Done
    
    description: Fetches a list of vehicles owned by the current user.
    url: http://127.0.0.1:5000/user/owned-vehicles
@@ -63,7 +63,7 @@ To deploy this project run
    fields: no-fields
    access: private
 
-5. To view all deals on a certain car
+5. To view all deals on a certain car - Done
 
    description: Fetches all deals available for a specific car.
    url: http://127.0.0.1:5000/user/deals/:carId
@@ -71,7 +71,7 @@ To deploy this project run
    fields: no-fields
    access: private
 
-6. To view all deals from a certain dealership
+6. To view all deals from a certain dealership - Done
 
    description: Fetches all deals offered by a specific dealership.
    url: http://127.0.0.1:5000/user/deals/dealership/:dealershipId
@@ -120,7 +120,7 @@ To deploy this project run
    access: public
 
 
- 2. To view all cars sold by dealership       
+ 2. To view all cars sold by dealership - Done
 
    description:  Fetches a list of vehicles sold by the dealership.
    url: http://127.0.0.1:5000/dealership/sold-cars/:dealershipId
@@ -128,7 +128,7 @@ To deploy this project run
    fields: no-fields
    access: private
 
- 3. To add cars to dealership
+ 3. To add cars to dealership - Done
 
    description: Adds a new car to the dealership's inventory.
    url: http://127.0.0.1:5000/dealership/add-car/:dealershipId
@@ -137,7 +137,7 @@ To deploy this project run
    access: private
 
 
-4. To view deals provided by dealership
+4. To view deals provided by dealership - Done
 
    description: Fetches all deals provided by the dealership.
    url: http://127.0.0.1:5000/dealership/deals/:dealershipId
@@ -147,11 +147,20 @@ To deploy this project run
    
 
 
- 5. To add deals to dealership
+ 5. To add deals to dealership - Done
 
    description: Adds a new deal to the dealership's offers.
    url: http://127.0.0.1:5000/dealership/add-deal/:dealershipId
    method: post
    fields: car_id, deal_info{dealerShipId, downPayment, financing{month, interest}, monthlyPayments{remaining_bal, monthlyPayment}, negotiatedPrice, userId, vehicle}
    access: private
+
+
+6. 1. Dealership registration
+
+   description: Dealership registration
+   url: http://127.0.0.1:5000/dealership/register
+   method: post
+   fields: dealership_email, dealership_name, dealership_location, password, dealership_info
+   access: public
  

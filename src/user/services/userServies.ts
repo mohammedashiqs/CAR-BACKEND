@@ -9,22 +9,22 @@ import bcrypt from 'bcrypt'
 
 
 export const viewAllCars = async () => {
-    
-    try{
 
-        let car =  await db.collection(collections.CAR_COLLECTION).find().toArray()
-            if (!car || car.length == 0) {
+    try {
 
-                throw new CustomError(
-                    "No Cars found",
-                    400,
-                    ""
-    
-                )
-            
+        let car = await db.collection(collections.CAR_COLLECTION).find().toArray()
+        if (!car || car.length == 0) {
+
+            throw new CustomError(
+                "No Cars found",
+                400,
+                ""
+
+            )
+
         }
         return car
-    }catch(error){
+    } catch (error) {
         throw error
     }
 }
@@ -33,24 +33,24 @@ export const viewAllCars = async () => {
 
 
 export const viewCarsInDealership = async (dealershipId: ObjectId) => {
-    try{
+    try {
         console.log(dealershipId)
         let cars = await db.collection(collections.DEALERSHIP_COLLECTION).aggregate([
             {
-                $match:{_id: dealershipId}
+                $match: { _id: dealershipId }
             },
             {
                 $unwind: '$cars'
             },
             {
-                $project:{
+                $project: {
                     carId: '$cars'
                 }
             },
             {
-                $lookup:{
+                $lookup: {
                     from: collections.CAR_COLLECTION,
-                    localField:'carId',
+                    localField: 'carId',
                     foreignField: '_id',
                     as: 'car'
                 }
@@ -70,30 +70,30 @@ export const viewCarsInDealership = async (dealershipId: ObjectId) => {
                 ""
             )
         }
-        
-        
+
+
         return cars
 
-    }catch(error){
+    } catch (error) {
         throw error
     }
 }
 
 
-   
+
 
 export const viewDealershipsWithCar = async (carId: ObjectId) => {
-    try{
+    try {
         console.log(carId)
         let dealerships = await db.collection(collections.DEALERSHIP_COLLECTION).aggregate([
             {
                 $unwind: '$cars'
             },
             {
-                $match: {cars: carId}
+                $match: { cars: carId }
             }
         ]).toArray()
-        
+
         if (!dealerships || dealerships.length == 0) {
             throw new CustomError(
                 "No Dealerships found",
@@ -101,10 +101,10 @@ export const viewDealershipsWithCar = async (carId: ObjectId) => {
                 ""
             )
         }
-        
+
         return dealerships
 
-    }catch(error){
+    } catch (error) {
         throw error
     }
 }
@@ -113,17 +113,17 @@ export const viewDealershipsWithCar = async (carId: ObjectId) => {
 
 
 export const viewOwnedVehicles = async (userId: ObjectId) => {
-    try{
-        
+    try {
+
         let ownedVehicles = await db.collection(collections.USER_COLLECTION).aggregate([
             {
-                $match:{_id: userId}
+                $match: { _id: userId }
             },
             {
                 $unwind: '$vehicle_info'
             },
             {
-                $lookup:{
+                $lookup: {
                     from: collections.SOLDVEHICLES_COLLECTION,
                     localField: 'vehicle_info',
                     foreignField: '_id',
@@ -131,7 +131,7 @@ export const viewOwnedVehicles = async (userId: ObjectId) => {
                 }
             },
             {
-                $lookup:{
+                $lookup: {
                     from: collections.CAR_COLLECTION,
                     localField: 'carId.car_id',
                     foreignField: '_id',
@@ -139,19 +139,19 @@ export const viewOwnedVehicles = async (userId: ObjectId) => {
                 }
             },
             {
-                $project:{
+                $project: {
                     _id: 0,
-                    cars:1
+                    cars: 1
                 }
             }
-        
-           
+
+
         ]).toArray()
-        
-        
+
+
         return ownedVehicles
 
-    }catch(error){
+    } catch (error) {
         throw error
     }
 }
@@ -160,18 +160,18 @@ export const viewOwnedVehicles = async (userId: ObjectId) => {
 
 
 
-export const viewDealsOnCar = async (userId: any, carId: any) => {
-    try{
+export const viewDealsOnCar = async (userId: ObjectId, carId: any) => {
+    try {
 
-            userId = new ObjectId(userId)
-            carId = new ObjectId(carId)
+        carId = new ObjectId(carId)
 
         let deals = await db.collection(collections.DEAL_COLLECTION).aggregate([
             {
-                $match: {"deal_info.userId": userId, car_id: carId}
+                $match: { "deal_info.userId": userId, car_id: carId }
             }
         ]).toArray()
-        
+        console.log(deals)
+
         if (!deals || deals.length == 0) {
             throw new CustomError(
                 "No deals found",
@@ -179,10 +179,10 @@ export const viewDealsOnCar = async (userId: any, carId: any) => {
                 ""
             )
         }
-        
+
         return deals
 
-    }catch(error){
+    } catch (error) {
         throw error
     }
 }
@@ -191,31 +191,33 @@ export const viewDealsOnCar = async (userId: any, carId: any) => {
 
 
 export const viewDealsFromDealership = async (userId: any, dealershipId: any) => {
-    try{
+    try {
 
-        userId = new ObjectId(userId)
+        
         dealershipId = new ObjectId(dealershipId)
 
         let deals = await db.collection(collections.DEALERSHIP_COLLECTION).aggregate([
             {
-                $match: {_id: dealershipId}
+                $match: { _id: dealershipId }
             },
             {
                 $unwind: '$deals'
             },
             {
-                $lookup:{
+                $lookup: {
                     from: collections.DEAL_COLLECTION,
                     localField: 'deals',
                     foreignField: '_id',
                     as: 'deals'
                 }
+                
             },
             {
-                $match:{"deals.deal_info.userId": userId}
+                $match: { "deals.deals.deal_info.userId": userId }
             }
         ]).toArray()
-        
+        console.log(deals)
+
         if (!deals || deals.length == 0) {
             throw new CustomError(
                 "No deals found",
@@ -223,10 +225,10 @@ export const viewDealsFromDealership = async (userId: any, dealershipId: any) =>
                 ""
             )
         }
-        
+
         return deals
 
-    }catch(error){
+    } catch (error) {
         throw error
     }
 }
@@ -237,13 +239,13 @@ export const viewDealsFromDealership = async (userId: any, dealershipId: any) =>
 
 
 
-export const createUser = async (user:IUser)=>{
+export const registerUser = async (user: IUser) => {
 
     try {
 
         //check if the email is exists
-        let userFromDb = await db.collection(collections.USER_COLLECTION).findOne({user_email: user.user_email})
-        if(userFromDb){
+        let userFromDb = await db.collection(collections.USER_COLLECTION).findOne({ user_email: user.user_email })
+        if (userFromDb) {
 
             throw new CustomError(
                 "User is Already exists",
@@ -257,10 +259,11 @@ export const createUser = async (user:IUser)=>{
         user.password = await bcrypt.hash(user.password, salt)
 
         //register the user
-         user.createdAt = new Date()
-         let createdUser = await db.collection(collections.USER_COLLECTION).insertOne(user)
-        
-         return createdUser
+        user.createdAt = new Date()
+        user.user_role = "user"
+        let createdUser = await db.collection(collections.USER_COLLECTION).insertOne(user)
+
+        return createdUser
     } catch (error) {
         throw error
     }

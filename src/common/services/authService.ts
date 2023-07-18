@@ -7,18 +7,30 @@ import jwt from "jsonwebtoken"
 import generateTokens from "../../utilty/generateTokens"
 
 
+const check_email_exists = async (email: string) => {
+
+    let user_exists = await db.collection(collections.USER_COLLECTION).findOne({ user_email: email })
+    if (!user_exists) {
+        let dealership_exists = await db.collection(collections.DEALERSHIP_COLLECTION).findOne({ dealership_email: email })
+        return dealership_exists
+    }
+    return user_exists
+
+
+}
 
 
 
 
-export const login = async (user_email: string, password: string) => {
+
+export const login = async (email: string, password: string) => {
 
     try {
 
         //check for email
-        let user: any  = await db.collection(collections.USER_COLLECTION).findOne({user_email:user_email})
+        let user_type = await check_email_exists(email)
 
-        if(!user){
+        if (!user_type) {
             throw new CustomError(
                 "Invalid Email",
                 401,
@@ -27,31 +39,31 @@ export const login = async (user_email: string, password: string) => {
         }
 
         //check for password
-        let isMatch: boolean = await bcrypt.compare(password, user.password)
-        if(!isMatch){
+        let isMatch: boolean = await bcrypt.compare(password, user_type.password)
+        if (!isMatch) {
             throw new CustomError(
                 'Invalid Password',
                 401,
                 ""
             )
         }
-        
+
         //create a token and send
 
         let payload: any = {
-            user:{
-                id: user._id,
-                name: user.user_info.name
+            user: {
+                id: user_type._id,
+                user_role: user_type.user_role
             }
         }
 
         //generate access token and refresh token
 
-        const  tokens  =  await generateTokens(payload, user._id)
+        const tokens = await generateTokens(payload, user_type._id)
 
-        const {accessToken, refreshToken} = tokens
-         
-        return {accessToken, refreshToken}
+        const { accessToken, refreshToken } = tokens
+
+        return { accessToken, refreshToken }
 
     } catch (error) {
         throw error

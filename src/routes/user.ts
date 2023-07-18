@@ -4,8 +4,8 @@ import {IUser} from '../user/models/IUser'
 import { ObjectId } from 'mongodb';
 import {body, validationResult} from 'express-validator';
 import collections from '../config/collections';
-import { createUser, viewAllCars, viewCarsInDealership, viewDealershipsWithCar, viewDealsFromDealership, viewDealsOnCar, viewOwnedVehicles } from '../user/services/userServies';
-import { AuthenticateToken } from '../common/services/common';
+import { registerUser, viewAllCars, viewCarsInDealership, viewDealershipsWithCar, viewDealsFromDealership, viewDealsOnCar, viewOwnedVehicles } from '../user/services/userServies';
+import { AuthenticateToken, authorizeRole } from '../common/services/common';
 
 
 
@@ -54,7 +54,7 @@ userRouter.get('/cars/:dealershipId', async (req: express.Request, res: express.
 
 
 /* To view dealerships with a certain car */
-userRouter.get('/dealerships/:carId', async (req: express.Request, res: express.Response, next) => {
+userRouter.get('/dealerships/:carId', AuthenticateToken, authorizeRole('user'), async (req: express.Request, res: express.Response, next) => {
     try{
         let carId: ObjectId = new ObjectId(req.params.carId)
 
@@ -78,11 +78,11 @@ userRouter.get('/dealerships/:carId', async (req: express.Request, res: express.
 
 
 /* To view all vehicles owned by user */
-userRouter.get('/owned-vehicles', AuthenticateToken, async (req:express.Request, res: express.Response, next) => {
+userRouter.get('/owned-vehicles', AuthenticateToken, authorizeRole('user'), async (req:express.Request, res: express.Response, next: NextFunction) => {
             
     try{
-        const userId = req.userId
-
+        const userId = req.user.id
+        console.log(userId)
         let ownedVehicles = await viewOwnedVehicles(userId)
         
         res.status(200).json({
@@ -101,9 +101,10 @@ userRouter.get('/owned-vehicles', AuthenticateToken, async (req:express.Request,
 
 
 /* To view all deals on a certain car */
-userRouter.get('/deals/:carId', async (req: express.Request, res: express.Response, next) => {
+userRouter.get('/deals/:carId', AuthenticateToken, authorizeRole('user'), async (req: express.Request, res: express.Response, next) => {
     try{
-        let {userId, carId}: any = req.query
+        const userId = req.user.id
+        let carId = req.params.carId
 
         
         let deals= await viewDealsOnCar(userId, carId)
@@ -123,9 +124,12 @@ userRouter.get('/deals/:carId', async (req: express.Request, res: express.Respon
 
 
 /* To view all deals from a certain dealership */
-userRouter.get('/deals/dealership/:dealershipId', async (req: express.Request, res: express.Response, next) => {
+userRouter.get('/deals/dealership/:dealershipId', AuthenticateToken, authorizeRole('user'), async (req: express.Request, res: express.Response, next) => {
     try{
-        let {userId, dealershipId}: any = req.query
+
+
+        const userId = req.user
+        let dealershipId = req.params.dealershipId
 
         
         let deals= await viewDealsFromDealership(userId, dealershipId)
@@ -162,7 +166,7 @@ userRouter.post('/register', [
             let user: IUser = req.body
             //todo registration logic
 
-            let createdUser = await createUser(user)
+            let createdUser = await registerUser(user)
             
          
             res.status(200).json({

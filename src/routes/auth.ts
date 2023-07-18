@@ -11,7 +11,7 @@ import { login } from '../common/services/authService';
 const authRouter: express.Router = express.Router()
 
 authRouter.post('/login', [
-  body('user_email').not().isEmpty().withMessage('Email is Required'),
+  body('email').not().isEmpty().withMessage('Email is Required'),
   body('password').not().isEmpty().withMessage('Password is Required')
 ], async (req: express.Request, res: express.Response, next: NextFunction) => {
 
@@ -25,15 +25,15 @@ authRouter.post('/login', [
 
 
   try {
-    let { user_email, password } = req.body
+    let { email, password } = req.body
 
 
     //todo login logic
-    let tokens = await login(user_email, password)
+    let tokens = await login(email, password)
 
     res.status(200).json({
-      msg: 'user created successfully',
-      createdCar: tokens
+      msg: 'logged in successfully',
+      tokens: tokens
     })
 
 
