@@ -1,9 +1,7 @@
 import collections from "../../config/collections"
 import { db } from "../../config/db"
-import { IUser } from "../../user/models/IUser"
 import { CustomError } from "../models/custumError"
 import bcrypt from 'bcrypt'
-import jwt from "jsonwebtoken"
 import generateTokens from "../../utilty/generateTokens"
 
 
@@ -68,4 +66,24 @@ export const login = async (email: string, password: string) => {
     } catch (error) {
         throw error
     }
-} 
+}
+
+
+export const logout = async (refreshToken: string) => {
+    try {
+        const userToken = await db.collection(collections.USERTOKEN_COLLECTION).findOne({ token: refreshToken })
+       
+        if (!userToken) {
+
+            return 'Logged out successfullyjj'
+
+        } else {
+          await db.collection(collections.USERTOKEN_COLLECTION).deleteOne({ token: refreshToken })
+            return 'Logged out successfully'
+        }
+
+
+    } catch (error) {
+        throw error
+    }
+}

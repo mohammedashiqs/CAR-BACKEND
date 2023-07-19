@@ -1,6 +1,6 @@
 import express, { NextFunction } from 'express'
 import { body, validationResult } from 'express-validator';
-import { login } from '../common/services/authService';
+import { login, logout } from '../common/services/authService';
 
 
 
@@ -42,6 +42,27 @@ authRouter.post('/login', [
   }
 
 })
+
+
+
+authRouter.get('/logout', async (req: express.Request, res: express.Response, next: NextFunction)=> {
+
+    try{
+        const refreshToken = req.body.refresh_Token;
+        if(refreshToken){
+          const authDetails = await logout(refreshToken)
+
+          res.status(200).json({
+            msg: authDetails
+          })
+        }
+      }catch(error){
+        next(error)
+      }
+})
+
+
+
 
 
 export default authRouter

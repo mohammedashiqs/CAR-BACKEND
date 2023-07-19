@@ -1,9 +1,7 @@
 import express, { NextFunction } from 'express';
-import {db} from '../config/db'
 import {IUser} from '../user/models/IUser'
 import { ObjectId } from 'mongodb';
 import {body, validationResult} from 'express-validator';
-import collections from '../config/collections';
 import { registerUser, viewAllCars, viewCarsInDealership, viewDealershipsWithCar, viewDealsFromDealership, viewDealsOnCar, viewOwnedVehicles } from '../user/services/userServies';
 import { AuthenticateToken, authorizeRole } from '../common/services/common';
 
@@ -101,7 +99,7 @@ userRouter.get('/owned-vehicles', AuthenticateToken, authorizeRole('user'), asyn
 
 
 /* To view all deals on a certain car */
-userRouter.get('/deals/:carId', AuthenticateToken, authorizeRole('user'), async (req: express.Request, res: express.Response, next) => {
+userRouter.get('/deals/:carId', AuthenticateToken, authorizeRole('user'), async (req: express.Request, res: express.Response, next: NextFunction) => {
     try{
         const userId = req.user.id
         let carId = req.params.carId
