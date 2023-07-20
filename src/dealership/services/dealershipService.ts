@@ -227,3 +227,32 @@ export const registerDealership = async (dealership: IDealership) => {
 
 }
 
+
+
+
+export const dealerChangePassword = async (oldPassword: string, newPassword: string, userId: ObjectId) => {
+
+    try {
+
+        const user = await db.collection(collections.DEALERSHIP_COLLECTION).findOne({ _id: userId })
+
+        const isPasswordValid = await bcrypt.compare(oldPassword, user?.password)
+
+        if (!isPasswordValid) {
+            throw new CustomError(
+                "Invalid old password",
+                401,
+                ""
+            )
+        }
+        let salt = await bcrypt.genSalt(10)
+        let changedPassword = await bcrypt.hash(newPassword, salt)
+
+        await db.collection(collections.DEALERSHIP_COLLECTION).updateOne({ _id: userId }, { $set: { password: changedPassword } })
+
+        return "Password changed successfully"
+
+    } catch (error) {
+        throw error
+    }
+}

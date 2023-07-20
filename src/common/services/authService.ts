@@ -3,6 +3,7 @@ import { db } from "../../config/db"
 import { CustomError } from "../models/custumError"
 import bcrypt from 'bcrypt'
 import generateTokens from "../../utilty/generateTokens"
+import { IUser } from "../../user/models/IUser"
 
 
 const check_email_exists = async (email: string) => {
@@ -87,3 +88,40 @@ export const logout = async (refreshToken: string) => {
         throw error
     }
 }
+
+
+
+
+export const registerUser = async (user: IUser) => {
+
+    try {
+
+        //check if the email is exists
+        let userFromDb = await db.collection(collections.USER_COLLECTION).findOne({ user_email: user.user_email })
+        if (userFromDb) {
+
+            throw new CustomError(
+                "User is Already exists",
+                400,
+                ""
+            )
+        }
+
+        //encrypt the password
+        let salt = await bcrypt.genSalt(10)
+        user.password = await bcrypt.hash(user.password, salt)
+
+        //register the user
+        user.createdAt = new Date()
+        user.user_role = "user"
+        let createdUser = await db.collection(collections.USER_COLLECTION).insertOne(user)
+
+        return createdUser
+    } catch (error) {
+        throw error
+    }
+
+}
+
+
+

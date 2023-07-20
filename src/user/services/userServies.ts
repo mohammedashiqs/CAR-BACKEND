@@ -2,7 +2,6 @@ import collections from '../../config/collections';
 import { CustomError } from "../../common/models/custumError"
 import { db } from '../../config/db';
 import { ObjectId } from 'mongodb';
-import { IUser } from '../models/IUser';
 import bcrypt from 'bcrypt'
 
 
@@ -193,7 +192,7 @@ export const viewDealsOnCar = async (userId: ObjectId, carId: any) => {
 export const viewDealsFromDealership = async (userId: any, dealershipId: any) => {
     try {
 
-        
+
         dealershipId = new ObjectId(dealershipId)
 
         let deals = await db.collection(collections.DEALERSHIP_COLLECTION).aggregate([
@@ -210,7 +209,7 @@ export const viewDealsFromDealership = async (userId: any, dealershipId: any) =>
                     foreignField: '_id',
                     as: 'deals'
                 }
-                
+
             },
             {
                 $match: { "deals.deals.deal_info.userId": userId }
@@ -239,35 +238,29 @@ export const viewDealsFromDealership = async (userId: any, dealershipId: any) =>
 
 
 
-export const registerUser = async (user: IUser) => {
+export const userChangePassword = async (oldPassword: string, newPassword: string, userId: ObjectId) => {
 
     try {
 
-        //check if the email is exists
-        let userFromDb = await db.collection(collections.USER_COLLECTION).findOne({ user_email: user.user_email })
-        if (userFromDb) {
+        const user = await db.collection(collections.USER_COLLECTION).findOne({ _id: userId })
 
+        const isPasswordValid = await bcrypt.compare(oldPassword, user?.password)
+
+        if (!isPasswordValid) {
             throw new CustomError(
-                "User is Already exists",
-                400,
+                "Invalid old password",
+                401,
                 ""
             )
         }
-
-        //encrypt the password
         let salt = await bcrypt.genSalt(10)
-        user.password = await bcrypt.hash(user.password, salt)
+        let changedPassword = await bcrypt.hash(newPassword, salt)
 
-        //register the user
-        user.createdAt = new Date()
-        user.user_role = "user"
-        let createdUser = await db.collection(collections.USER_COLLECTION).insertOne(user)
+        await db.collection(collections.USER_COLLECTION).updateOne({ _id: userId }, { $set: { password: changedPassword } })
 
-        return createdUser
+        return "Password changed successfully"
+
     } catch (error) {
         throw error
     }
-
 }
-
-

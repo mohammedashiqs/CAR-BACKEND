@@ -1,6 +1,7 @@
 import express, { NextFunction } from 'express'
 import { body, validationResult } from 'express-validator';
-import { login, logout } from '../common/services/authService';
+import { login, logout, registerUser } from '../common/services/authService';
+import { IUser } from '../user/models/IUser';
 
 
 
@@ -45,19 +46,53 @@ authRouter.post('/login', [
 
 
 
-authRouter.get('/logout', async (req: express.Request, res: express.Response, next: NextFunction)=> {
+authRouter.get('/logout', async (req: express.Request, res: express.Response, next: NextFunction) => {
 
-    try{
-        const refreshToken = req.body.refresh_Token;
-        if(refreshToken){
-          const authDetails = await logout(refreshToken)
+  try {
+    const refreshToken = req.body.refresh_Token;
+    if (refreshToken) {
+      const authDetails = await logout(refreshToken)
 
-          res.status(200).json({
-            msg: authDetails
+      res.status(200).json({
+        msg: authDetails
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+
+authRouter.post('/register', [
+  body('user_email').not().isEmpty().withMessage('Email is required'),
+  body('password').not().isEmpty().withMessage('Password is required'),
+  body('user_location').not().isEmpty().withMessage('Location is required'),
+  body('user_info.name').not().isEmpty().withMessage('Name is required')
+], async (req: express.Request, res: express.Response, next:NextFunction)=>{
+
+      let errors = validationResult(req)
+      if(!errors.isEmpty()){
+          return res.status(400).json({
+              errors: errors.array()
           })
-        }
+      }
+
+      try{
+          let user: IUser = req.body
+          //todo registration logic
+
+          let createdUser = await registerUser(user)
+          
+       
+          res.status(200).json({
+              msg: 'user created successfully',
+              createdCar: createdUser
+          })
+
+
+
       }catch(error){
-        next(error)
+          next(error)
       }
 })
 

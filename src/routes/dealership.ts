@@ -1,7 +1,7 @@
 import express, { NextFunction } from 'express'
 import { ObjectId } from 'mongodb';
 import { IDealership } from '../dealership/models/IDealership';
-import {viewAllCars, addCar, addDeal, viewDeals, viewSoldCars, registerDealership, } from '../dealership/services/dealershipService'
+import {dealerChangePassword, viewAllCars, addCar, addDeal, viewDeals, viewSoldCars, registerDealership, } from '../dealership/services/dealershipService'
 import { ICar } from '../user/models/ICar';
 import { IDeal } from '../dealership/models/IDeal';
 import { body, validationResult } from 'express-validator';
@@ -149,6 +149,28 @@ dealershipRouter.post('/register', [
 
 
 
+
+dealershipRouter.put('/changePassword', AuthenticateToken, async (req: express.Request, res: express.Response, next: NextFunction) => {
+
+    const userId = req.user.id
+  
+    try {
+  
+      const { oldPassword, newPassword } = req.body;
+  
+      const result = await dealerChangePassword(oldPassword, newPassword, userId)
+  
+      res.status(200).json({
+        msg: result
+    })
+      
+  
+    } catch (error) {
+      next(error)
+    }
+  })
+  
+  
 
 
 
