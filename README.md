@@ -79,7 +79,14 @@ To deploy this project run
    fields: no-fields
    access: private
 
-7. 
+7. To change the password of user/dealership - Done
+
+   description: change the password of user and dealership
+   url: http://127.0.0.1:5000/users/changePassword
+   method: put
+   fields: oldPassword, newPassword
+   access: private  
+
 
 
 ## II Auth Module
@@ -111,13 +118,6 @@ To deploy this project run
    fields: refresh_token
    access: public
 
-4. To change the password of user/dealership - Done
-
-   description: change the password of user and dealership
-   url: http://127.0.0.1:5000/auths/changePassword
-   method: put
-   fields: oldPassword, newPassword
-   access: private  
 
 
 
@@ -178,3 +178,10 @@ To deploy this project run
    fields: dealership_email, dealership_name, dealership_location, password, dealership_info
    access: public
  
+8. To change the password of dealership - Done
+
+   description: change the password of user and dealership
+   url: http://127.0.0.1:5000/dealerships/changePassword
+   method: put
+   fields: oldPassword, newPassword
+   access: private 
